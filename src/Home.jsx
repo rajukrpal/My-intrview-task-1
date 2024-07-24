@@ -15,6 +15,13 @@ const Home = () => {
   const [products, setProducts] = useState([]); // all product aaye ga 
   const [editMode, setEditMode] = useState(false);
   const [editProduct, setEditProduct] = useState(null); 
+  const [error,setError] = useState({
+    image:"",
+    name: "",
+    price: "",
+    gst: "",
+    description: "",
+  })
 
 
   useEffect(() => {
@@ -50,6 +57,8 @@ const Home = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+   
+
     const newProduct = {
       id: editMode ? editProduct.id : new Date().getTime(),
       image: image || (editMode ? editProduct.image : null),
@@ -58,6 +67,46 @@ const Home = () => {
       gst: gst,
       description: description,
     };
+
+
+    let formIsValid = true;
+    const newErrors = {
+      image:null,
+      name: "",
+      price: "",
+      gst: "",
+      description: "",
+    };
+
+    if (image === null) {
+      newErrors.image = "Product Image is required";
+      formIsValid = false;
+    }
+
+    if (name.trim() === "") {
+      newErrors.name = "Product Name is required";
+      formIsValid = false;
+    }
+
+    if (price.trim() === "") {
+      newErrors.price = "Price is required";
+      formIsValid = false;
+    }
+
+    if (gst.trim() === "") {
+      newErrors.gst = "GST is required";
+      formIsValid = false;
+    }
+
+    if (description.trim() === "") {
+      newErrors.description = "Description is required";
+      formIsValid = false;
+    }
+
+    if (!formIsValid) {
+      setError(newErrors);
+      return;
+    }
 
     if (editMode) {
       const updatedProducts = products.map((product) =>
@@ -78,6 +127,13 @@ const Home = () => {
     setDescription("");
     setEditMode(false);
     setEditProduct(null);
+    setError({
+      image:"",
+      name: "",
+      price: "",
+      gst: "",
+      description: "",
+    })
   };
 
 
@@ -118,44 +174,50 @@ const Home = () => {
         <Form onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Form.Group as={Col} md="4">
-              <Form.Label>Product Image</Form.Label>
+              <Form.Label className="uppercase">Product Image</Form.Label>
               <Form.Control type="file" onChange={handleImageChange} />
+              <span className="text-red-500">{error.image}</span>
             </Form.Group>
             <Form.Group as={Col} md="4">
-              <Form.Label>Product Name</Form.Label>
+              <Form.Label className="uppercase">Product Name</Form.Label>
               <Form.Control
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Product Name"
               />
+               <span className="text-red-500">{error.name}</span>
             </Form.Group>
+           
             <Form.Group as={Col} md="4">
-              <Form.Label>Price</Form.Label>
+              <Form.Label className="uppercase">Price</Form.Label>
               <Form.Control
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="Price"
               />
+              <span className="text-red-500">{error.price}</span>
             </Form.Group>
             <Form.Group as={Col} md="4">
-              <Form.Label>GST</Form.Label>
+              <Form.Label className="uppercase">GST</Form.Label>
               <Form.Control
                 type="number"
                 placeholder="GST"
                 value={gst}
                 onChange={(e) => setGst(e.target.value)}
               />
+              <span className="text-red-500">{error.gst}</span>
             </Form.Group>
             <Form.Group as={Col} md="4">
-              <Form.Label>Description</Form.Label>
+              <Form.Label className="uppercase">Description</Form.Label>
               <Form.Control
                 type="text"
                 value={description}
                 placeholder="Description"
                 onChange={(e) => setDescription(e.target.value)}
               />
+              <span className="text-red-500">{error.description}</span>
             </Form.Group>
           </Row>
           <Button className="uppercase" type="submit">Submit form</Button>
