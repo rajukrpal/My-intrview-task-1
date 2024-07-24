@@ -12,7 +12,7 @@ const Home = () => {
   const [price, setPrice] = useState("");
   const [gst, setGst] = useState("");
   const [description, setDescription] = useState("");
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]); // all product aaye ga 
   const [editMode, setEditMode] = useState(false);
   const [editProduct, setEditProduct] = useState(null); 
 
@@ -20,6 +20,20 @@ const Home = () => {
   useEffect(() => {
     const storedProducts = JSON.parse(localStorage.getItem("products")) || [];
     setProducts(storedProducts);
+
+    // ------QUESTION-----
+    // if(0.4+0.1+0.5-0.3 === 0.7){
+    //   console.log("true")
+    // }else{
+    //   console.log("false")
+    // }
+    // console.log("3" + "3" - 3)
+    // console.log("13" + "3" + "20")
+    // console.log(+33 + "30")
+    // console.log("33" + 30)
+    // console.log(+33 - "30")
+    // console.log("33" - 30)
+
   }, []);
 
   const handleImageChange = (e) => {
@@ -79,14 +93,13 @@ const Home = () => {
 
 
   const handelDelete = (productToDelete) => {
-
+    
     const updatedProducts = products.filter((product) => product.id !== productToDelete.id);
 
     setProducts(updatedProducts); // Update state to reflect deletion
 
     localStorage.setItem("products", JSON.stringify(updatedProducts));
 
-    console.log("Updated products:", updatedProducts);
   };
   
 
@@ -95,11 +108,11 @@ const Home = () => {
     <>
       <div className="p-3">
         <center>
-          <h4 className="">Product Ditail</h4>
+          <h4 className="uppercase">Product Ditail</h4>
         </center>
         <div className="flex justify-end ">
-          <button className="bg-gray-400 p-2 text-center rounded-md">
-          <Link to={"/products"}>Product Route</Link> 
+          <button className="bg-gray-300 p-2 text-center rounded-md uppercase ">
+          <Link className="no-underline" to={"/products"}>Product Route</Link> 
           </button>
         </div>
         <Form onSubmit={handleSubmit}>
@@ -145,12 +158,12 @@ const Home = () => {
               />
             </Form.Group>
           </Row>
-          <Button type="submit">Submit form</Button>
+          <Button className="uppercase" type="submit">Submit form</Button>
         </Form>
       </div>
       <div className="p-3">
         <center className="py-3">
-          <h4>Product List</h4>
+          <h4 className="uppercase">Product List</h4>
         </center>
         <div className="h-[55vh] border border-black overflow-scroll rounded-md">
         <Table striped bordered hover>
